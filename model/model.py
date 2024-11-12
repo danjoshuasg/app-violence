@@ -9,9 +9,12 @@ import psutil
 from torchvision.transforms.functional import resize
 from pytorchvideo.data.encoded_video import EncodedVideo
 from pytorchvideo.transforms import UniformTemporalSubsample
+from transformers import AutoConfig, AutoModel, CONFIG_MAPPING, MODEL_MAPPING
+from transformers import PreTrainedModel, PretrainedConfig, AutoConfig, AutoModel
 
 # Import from our model_configs module
-from model.teachers.MViT import VideoProcessingConfig, MViTConfig, MViTForVideoClassification
+#from model.teachers.MViT import VideoProcessingConfig, MViTConfig, MViTForVideoClassification
+from model.students.S3D import VideoProcessingConfig, S3DConfig, S3DForVideoClassification
 
 def load_and_transform_video(video_path, video_config):
     video = EncodedVideo.from_path(video_path)
@@ -38,22 +41,25 @@ def load_and_transform_video(video_path, video_config):
 
     return video_frames
 
+CONFIG_MAPPING.register("S3D", S3DConfig)
+MODEL_MAPPING.register(S3DConfig, S3DForVideoClassification)
 # Initialize model and configs
-model_config = MViTConfig(
-    num_classes=2,
-    num_frames=16,
-    model="MViT",
-    is_pretrained=True,
-    reinitialize_head=True,
-    label2id={"NonViolence": 0, "Violence": 1},
-    id2label={0: "NonViolence", 1: "Violence"}
-)
+# model_config = MViTConfig(
+#     num_classes=2,
+#     num_frames=16,
+#     model="MViT",
+#     is_pretrained=True,
+#     reinitialize_head=True,
+#     label2id={"NonViolence": 0, "Violence": 1},
+#     id2label={0: "NonViolence", 1: "Violence"}
+# )
 
-model = MViTForVideoClassification(model_config)
+model_config = AutoConfig.from_pretrained(f"DanJoshua/estudiante_S3D_profesor_MViT_kl_VIOPERU")
+model = AutoModel.from_pretrained(f"DanJoshua/estudiante_S3D_profesor_MViT_kl_VIOPERU", config=model_config)
 
 # Download and load weights
 weights_path = hf_hub_download(
-    repo_id="DanJoshua/profesor_MViT_S_VIOPERU",
+    repo_id="DanJoshua/estudiante_S3D_profesor_MViT_kl_VIOPERU",
     filename="model.safetensors"
 )
 
