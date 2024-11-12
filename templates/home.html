@@ -1,0 +1,64 @@
+<!-- Home -->
+{% extends "base.html" %}
+
+{% block title %}Detector de Violencia{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Bienvenido, {{ user }}</h1>
+    <p>Sube un video para analizar si contiene contenido violento.</p>
+
+    <!-- Área de carga de video -->
+    <div id="upload-area" class="upload-zone">
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="file-input-wrapper">
+                <label for="video_file" id="upload-label" class="upload-label">
+                    <span class="upload-icon">📁</span>
+                    <span class="upload-text">Selecciona un archivo de video o arrastra aquí</span>
+                    <span class="file-info" id="filename-display"></span>
+                </label>
+                <input type="file"
+                    id="video_file"
+                    name="video_file"
+                    accept="video/mp4,video/x-m4v,video/*"
+                    class="file-input"
+                    aria-label="Seleccionar archivo de video">
+            </div>
+        </form>
+    </div>
+
+    <!-- Animación de carga al subir el video -->
+    <div id="upload-loading" class="loading-container" style="display: none;">
+        <div class="loader"></div>
+        <p>Cargando video...</p>
+    </div>
+
+    <!-- Reproductor de video -->
+    <div id="video-container" class="video-preview" style="display: none;">
+        <h2>Video Cargado:</h2>
+        <video id="uploaded-video" controls preload="metadata"></video>
+    </div>
+
+    <!-- Botón para analizar el video -->
+    <div id="analyze-area" class="analyze-section" style="display: none;">
+        <button id="analyze-button" class="analyze-button">Analizar Video</button>
+    </div>
+
+    <!-- Animación de carga durante el análisis -->
+    <div id="analysis-loading" class="loading-container" style="display: none;">
+        <div class="loader"></div>
+        <p>Analizando video...</p>
+    </div>
+
+    <!-- Resultados -->
+    <div id="result" class="results-container" style="display: none;">
+        <h2>Resultados del Análisis:</h2>
+        <pre id="prediction" class="prediction-results"></pre>
+    </div>
+
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Detector de Violencia{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">Dan Santivañez</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('about') }}">Acerca</a></li>
+                    <li><a href="{{ url_for('demo') }}">Resultados</a></li>
+                    {% if 'email' in session %}
+                        <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Iniciar sesión</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}El futuro de la detección de violencia es ahora{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>El futuro de la detección de violencia en videos de vigilancia es ahora 🎥</h1>
+    <p>Prueba nuestra tecnología avanzada de detección de violencia en videos. Inicia sesión con Google y experimenta el poder de la inteligencia artificial en acción.</p>
+    <a href="{{ url_for('login') }}"><button><i class="fab fa-google"></i> Iniciar sesión con Google</button></a>
+</div>
+{% endblock %}

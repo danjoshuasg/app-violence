@@ -1,0 +1,12 @@
+<!-- templates/demo.html -->
+{% extends "base.html" %}
+
+{% block title %}Resultados{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Resultados</h1>
+    <p>Prueba nuestra demo y vea los resultados iniciando sesión y subiendo un video para análisis.</p>
+    <a href="{{ url_for('login') }}"><button><i class="fab fa-google"></i> Iniciar sesión para probar la demo</button></a>
+</div>
+{% endblock %}

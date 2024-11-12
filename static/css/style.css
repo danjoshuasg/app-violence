@@ -1,0 +1,304 @@
+/* style.css */
+
+/* Header */
+header {
+    background-color: #161b22;
+    padding: 10px 0;
+}
+
+.container-header {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: #ffffff;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #c9d1d9;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+nav ul li a:hover {
+    color: #ffffff;
+}
+
+.content {
+    padding: 40px 20px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0d1117; /* Fondo oscuro similar a GitHub */
+    color: #c9d1d9; /* Texto en gris claro */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 40px;
+}
+
+p {
+    font-size: 1.2em;
+    color: #8b949e;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    display: block;
+    margin-bottom: 20px;
+    color: #c9d1d9;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #238636; /* Botón verde GitHub */
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: #2ea043;
+}
+
+.error {
+    color: #f85149; /* Rojo para errores */
+    margin-top: 20px;
+}
+
+.result {
+    margin-top: 40px;
+}
+
+.result h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.result pre {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+    overflow: auto;
+    color: #c9d1d9;
+}
+
+a {
+    text-decoration: none;
+}
+
+canvas#background {
+    display: none; /* Ocultamos el canvas si no es necesario */
+}
+
+/* Estilos para el botón de cierre de sesión */
+.logout-button {
+    background-color: transparent;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    margin-top: 20px;
+}
+
+.logout-button:hover {
+    background-color: #21262d;
+}
+
+/* Área de arrastrar y soltar */
+#upload-area {
+    border: 2px dashed #30363d;
+    border-radius: 6px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    color: #c9d1d9;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+#upload-area.highlight {
+    background-color: #21262d;
+}
+
+#upload-label {
+    display: block;
+    font-size: 1.2em;
+    color: #c9d1d9;
+}
+
+#upload-area input[type="file"] {
+    display: none;
+}
+
+/* Animaciones de carga */
+#upload-loading, #analysis-loading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.loader {
+    border: 8px solid #c9d1d9;
+    border-top: 8px solid #238636;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Reproductor de video */
+#video-container {
+    margin-top: 20px;
+}
+
+#uploaded-video {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+}
+
+/* Botón de análisis */
+#analyze-area {
+    margin-top: 20px;
+}
+
+#analyze-button {
+    padding: 10px 20px;
+    background-color: #238636;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#analyze-button:hover {
+    background-color: #2ea043;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Reproductor de video */
+#video-container {
+    margin-top: 20px;
+}
+/* Asegúrate de que el campo input sea visible */
+#video_file {
+    display: block;
+    margin-top: 10px;
+}
+
+
+#uploaded-video {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+}
+
+/* Resultados */
+#result {
+    margin-top: 20px;
+}
+
+#result pre {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 6px;
+    overflow: auto;
+    color: #c9d1d9;
+}
+.upload-zone {
+    position: relative;
+    min-height: 200px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: pointer;
+}
+
+.upload-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.file-input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.highlight {
+    background-color: #21262d;
+    border-color: #238636;
+}
+
+.file-info {
+    margin-top: 1rem;
+    color: #8b949e;
+}
+
+.error-message {
+    background-color: #3d1c1c;
+    border: 1px solid #f85149;
+    color: #f85149;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}

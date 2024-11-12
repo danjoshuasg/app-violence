@@ -1,0 +1,27 @@
+<!-- templates/about.html -->
+{% extends "base.html" %}
+
+{% block title %}Acerca de{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Acerca de 📽️ 🚨 ⚠️</h1>
+    <p>Esta aplicación fue desarrollada por Dan Santivañez con el propósito de implementar y demostrar un método avanzado para la detección de violencia en videos a través de técnicas de Inteligencia Artificial. 🚨</p>
+
+    <h2>🔍 Metodología de Investigación</h2>
+    <p>La investigación se desarrolló en tres fases principales, cada una centrada en mejorar la precisión, eficiencia y capacidad de generalización de los modelos de detección de violencia.</p>
+
+    <h3>Fase 1: Afinamiento de Modelos Maestros 📊</h3>
+    <p>En esta fase, se perfeccionaron modelos preentrenados usando bases de datos que contienen escenas de violencia en entornos reales: <i>Real World Fight</i> (RWF2000), <i>Real Life Violence Situations</i> (RLVS) y <i>Violence Peru</i> (VioPeru). Para optimizar el entrenamiento, los videos fueron preprocesados a través de técnicas que resaltan características clave como segmentación y cajas delimitadoras. 🎥 Además, se aplicaron técnicas de regularización y normalización de píxeles, junto con rotaciones aleatorias para el entrenamiento.</p>
+    <p>Los modelos maestros — MViT y Swin3D— fueron evaluados en métricas de rendimiento como Exactitud, F1, Precisión y AUC, así como en complejidad computacional (número de parámetros, FLOPS y tiempo de inferencia). Con base en estos criterios, se seleccionaron los modelos más prometedores para entrenar los modelos estudiantes en la siguiente fase.</p>
+
+    <h3>Fase 2: Afinamiento de Modelos Estudiantes 🎓</h3>
+    <p>En la segunda fase, se perfeccionaron modelos estudiantes preentrenados que optimizan el procesamiento para dispositivos con menos recursos. Los candidatos seleccionados —S3D, Swin3D-tiny, MC3-18— fueron adaptados para la clasificación de videos usando módulos de atención desacoplados. Las técnicas de destilación de conocimiento aplicadas (Divergencia de Kullback-Leibler y Kullback-Leibler Adaptativa) permiten que los estudiantes aprendan de las probabilidades de los modelos maestros. Los modelos estudiantes se evaluaron con las mismas métricas de rendimiento y complejidad computacional. 📈</p>
+
+    <h3>Fase 3: Evaluación de Generalización 🌎</h3>
+    <p>En la fase final, se evaluó la capacidad de generalización de los modelos maestros y estudiantes en bases de datos no utilizadas durante el entrenamiento. 📂 También se realizó un análisis de errores en las clasificaciones incorrectas, con el fin de identificar áreas de mejora. El modelo final fue seleccionado por su rendimiento y eficiencia computacional, priorizando aquellos con mayor capacidad de generalización.</p>
+
+    <h2>🔖 Conclusión</h2>
+    <p>Este proyecto representa un avance significativo en la aplicación de inteligencia artificial para la seguridad y el análisis de contenido de video, proporcionando una herramienta eficiente y adaptable para la detección de violencia en tiempo real. ⚙️ La estructura en fases permitió afinar los modelos progresivamente, asegurando un equilibrio entre precisión y eficiencia, ampliando así su aplicabilidad en diversos entornos y dispositivos. 🔍</p>
+</div>
+{% endblock %}
