@@ -1,3 +1,8 @@
 config.py
-.env
+.venv
 flask_session
+.env
+app.log
+processing.py
+runtime.txt
+

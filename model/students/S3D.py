@@ -1,5 +1,5 @@
-from torchvision.models.video import s3d, S3D_Weights
-from transformers import PreTrainedModel, PretrainedConfig
+from torchvision.models.video import s3d #, S3D_Weights
+from transformers import PreTrainedModel, PretrainedConfig, AutoConfig, AutoModel
 from torch import nn
 import torch
 import torch.nn.functional as F
@@ -24,8 +24,8 @@ class S3DConfig(PretrainedConfig):
                  num_classes=2,
                  num_frames=16,
                  model="S3D",
-                 is_pretrained=True,
-                 reinitialize_head =True,
+                 is_pretrained=False,
+                 reinitialize_head =False,
                  distillation_type="kl",  # Tipo de destilación
                  label2id={"NonViolence": 0, "Violence": 1},
                  id2label={0: "NonViolence", 1: "Violence"},
@@ -39,7 +39,10 @@ class S3DConfig(PretrainedConfig):
         self.distillation_type = distillation_type
         self.label2id = label2id
         self.id2label = id2label
-
+    @classmethod
+    def from_pretrained(cls, pretrained_model_name_or_path, **kwargs):
+        config_dict = AutoConfig.from_pretrained(pretrained_model_name_or_path, **kwargs).to_dict()
+        return cls(**config_dict)
 
 class S3DForVideoClassification(PreTrainedModel):
     config_class = S3DConfig
@@ -48,8 +51,8 @@ class S3DForVideoClassification(PreTrainedModel):
         super().__init__(config)
         self.config = config
 
-        weights = S3D_Weights.DEFAULT if config.is_pretrained else None
-        self.model = s3d(weights=weights)
+        #weights = S3D_Weights.DEFAULT if config.is_pretrained else None
+        self.model = s3d(weights=None)
 
         if config.reinitialize_head:
             self._modify_classification_head()

@@ -1,64 +1,131 @@
-<!-- Home -->
 {% extends "base.html" %}
 
 {% block title %}Detector de Violencia{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Bienvenido, {{ user }}</h1>
-    <p>Sube un video para analizar si contiene contenido violento.</p>
+    <!-- Encabezado -->
+    <header class="page-header">
+        <h1>Bienvenido, {{ user }}</h1>
+        <p class="lead">Elija o suba un video para analizar si contiene contenido violento.</p>
+    </header>
 
-    <!-- Área de carga de video -->
-    <div id="upload-area" class="upload-zone">
-        <form id="upload-form" enctype="multipart/form-data">
-            <div class="file-input-wrapper">
-                <label for="video_file" id="upload-label" class="upload-label">
-                    <span class="upload-icon">📁</span>
-                    <span class="upload-text">Selecciona un archivo de video o arrastra aquí</span>
-                    <span class="file-info" id="filename-display"></span>
-                </label>
-                <input type="file"
-                    id="video_file"
-                    name="video_file"
-                    accept="video/mp4,video/x-m4v,video/*"
-                    class="file-input"
-                    aria-label="Seleccionar archivo de video">
+    <!-- Sección principal -->
+    <main class="content-wrapper">
+        <!-- Selección de tipo de video -->
+        <section class="video-type-selection">
+            <h2>Seleccione el tipo de contenido</h2>
+            <form id="video-type-form">
+                <div class="form-group">
+                    <label for="content-type">Tipo de contenido:</label>
+                    <select id="content-type" name="content-type">
+                        <option value="violencia">Violencia</option>
+                        <option value="no_violencia">No Violencia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="video-type">Tipo de video:</label>
+                    <select id="video-type" name="video-type">
+                        <!-- Las opciones se llenarán dinámicamente -->
+                    </select>
+                </div>
+            </form>
+        </section>
+
+        <!-- Zona de carga de video -->
+        <section class="upload-section">
+            <div class="upload-zone" id="upload-area">
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <label for="video_file" class="upload-label">
+                            <span class="upload-icon" aria-hidden="true">📁</span>
+                            <span class="upload-text">Arrastra tu video aquí o haz clic para seleccionar</span>
+                            <span class="upload-hint">Formatos soportados: MP4, MOV, AVI</span>
+                            <span class="file-info" id="filename-display"></span>
+                        </label>
+                        <input 
+                            type="file" 
+                            id="video_file" 
+                            name="video_file" 
+                            accept="video/mp4,video/x-m4v,video/*" 
+                            class="file-input" 
+                            aria-label="Seleccionar archivo de video">
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
 
-    <!-- Animación de carga al subir el video -->
-    <div id="upload-loading" class="loading-container" style="display: none;">
-        <div class="loader"></div>
-        <p>Cargando video...</p>
-    </div>
+            <!-- Estado de carga -->
+            <div id="upload-loading" class="loading-container" hidden>
+                <div class="loader" role="progressbar" aria-label="Cargando video">
+                    <span class="sr-only">Cargando video...</span>
+                </div>
+                <p class="loading-text">Cargando video...</p>
+            </div>
+        </section>
 
-    <!-- Reproductor de video -->
-    <div id="video-container" class="video-preview" style="display: none;">
-        <h2>Video Cargado:</h2>
-        <video id="uploaded-video" controls preload="metadata"></video>
-    </div>
+        <!-- Previsualización del video -->
+        <section id="video-container" class="video-preview" hidden>
+            <h2>Video Cargado</h2>
+            <div class="video-wrapper">
+                <video 
+                    id="uploaded-video" 
+                    controls 
+                    preload="metadata"
+                    aria-label="Video cargado para análisis">
+                    <p>Tu navegador no soporta la reproducción de videos.</p>
+                </video>
+            </div>
+        </section>
+        <!-- Sección de elegir el modelo -->
+        <section class="model-selection">
+            <h2>Seleccione el tipo de modelo</h2>
+            <form id="model-form">
+                <div class="form-group">
+                    <label for="model-type">Tipo de modelo:</label>
+                    <select id="model-type" name="model-type">
+                        <option value="maestro">Maestro</option>
+                        <option value="estudiante">Estudiante</option>
+                    </select>
+                </div>
+            </form>
+        </section>
 
-    <!-- Botón para analizar el video -->
-    <div id="analyze-area" class="analyze-section" style="display: none;">
-        <button id="analyze-button" class="analyze-button">Analizar Video</button>
-    </div>
+        <!-- Sección de análisis -->
+        <section id="analyze-area" class="analyze-section" hidden>
+            <button 
+                id="analyze-button" 
+                class="analyze-button"
+                aria-label="Analizar video">
+                <span class="button-text">Analizar Video</span>
+            </button>
 
-    <!-- Animación de carga durante el análisis -->
-    <div id="analysis-loading" class="loading-container" style="display: none;">
-        <div class="loader"></div>
-        <p>Analizando video...</p>
-    </div>
+            <!-- Estado del análisis -->
+            <div id="analysis-loading" class="loading-container" hidden>
+                <div class="loader" role="progressbar" aria-label="Analizando video">
+                    <span class="sr-only">Analizando video...</span>
+                </div>
+                <p class="loading-text">Analizando video...</p>
+            </div>
+        </section>
 
-    <!-- Resultados -->
-    <div id="result" class="results-container" style="display: none;">
-        <h2>Resultados del Análisis:</h2>
-        <pre id="prediction" class="prediction-results"></pre>
-    </div>
+        <!-- Resultados del análisis -->
+        <section id="result" class="results-container" hidden>
+            <h2>Resultados del Análisis</h2>
+            <div class="results-wrapper">
+                <pre id="prediction" class="prediction-results" aria-live="polite"></pre>
+            </div>
+        </section>
 
-    {% if error %}
-        <div class="error-message">{{ error }}</div>
-    {% endif %}
+        <!-- Mensajes de error -->
+        {% if error %}
+        <div class="error-message" role="alert">
+            <span class="error-icon" aria-hidden="true">⚠️</span>
+            <span class="error-text">{{ error }}</span>
+        </div>
+        {% endif %}
+    </main>
 </div>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Tuple
-from transformers import PreTrainedModel, PretrainedConfig
+from transformers import PreTrainedModel, PretrainedConfig, AutoConfig, AutoModel
 from torch import nn
 import torch
 from torchvision.models.video import mvit_v2_s, MViT_V2_S_Weights
@@ -24,8 +24,8 @@ class MViTConfig(PretrainedConfig):
                  num_classes=2,
                  num_frames=16,
                  model="MViT",
-                 is_pretrained=True,
-                 reinitialize_head=True,
+                 is_pretrained=False,
+                 reinitialize_head=False,
                  label2id={"NonViolence": 0, "Violence": 1},
                  id2label={0: "NonViolence", 1: "Violence"},
                  **kwargs):
@@ -37,6 +37,11 @@ class MViTConfig(PretrainedConfig):
         self.reinitialize_head = reinitialize_head
         self.label2id = label2id
         self.id2label = id2label
+
+    @classmethod
+    def from_pretrained(cls, pretrained_model_name_or_path, **kwargs):
+        config_dict = AutoConfig.from_pretrained(pretrained_model_name_or_path, **kwargs).to_dict()
+        return cls(**config_dict)
 
 class Identity(nn.Module):
     def __init__(self):

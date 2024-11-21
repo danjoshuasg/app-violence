@@ -3,22 +3,104 @@
 /* Header */
 header {
     background-color: #161b22;
-    padding: 10px 0;
+    padding: 20px 0;
 }
 
+header .page-header h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+header .page-header p.lead {
+    font-size: 1.2em;
+    color: #8b949e;
+    margin-top: 10px;
+}
 .container-header {
     max-width: 960px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 10px;
 }
+
+.footer {
+    background-color: #161b22;
+    color: white;
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 1rem;
+}
+
+.footer-section {
+    flex: 1;
+    max-width: 200px;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+}
+
+.social-links a {
+    color: #8b949e;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    transition: color 0.3s;
+}
+
+.footer-section p {
+    font-size: 0.9em;
+    color: #8b949e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5em;
+ }
+ 
+ .footer-section p i {
+    font-size: 1em;
+ }
+
+.social-links a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #252b34;
+}
+
+
+
 
 .logo a {
     color: #ffffff;
     font-size: 1.5em;
     font-weight: 600;
     text-decoration: none;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 60px;
+    width: auto;
+    filter: brightness(1.5) contrast(1.1);
 }
 
 nav ul {
@@ -44,6 +126,7 @@ nav ul li a:hover {
 
 .content {
     padding: 40px 20px;
+    flex: 1;
 }
 
 body {
@@ -51,14 +134,18 @@ body {
     padding: 0;
     background-color: #0d1117; /* Fondo oscuro similar a GitHub */
     color: #c9d1d9; /* Texto en gris claro */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 .container {
-    max-width: 960px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
 }
+
 
 h1 {
     font-size: 2.5em;
@@ -71,6 +158,11 @@ p {
     font-size: 1.2em;
     color: #8b949e;
 }
+
+a {
+    text-decoration: none;
+}
+
 
 form {
     margin-bottom: 20px;
@@ -107,20 +199,20 @@ button:hover {
 
 .result h2 {
     color: #ffffff;
+    font-size: 1.5em;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #30363d;
 }
 
 .result pre {
     background-color: #161b22;
-    padding: 20px;
-    border-radius: 6px;
-    overflow: auto;
-    color: #c9d1d9;
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-a {
-    text-decoration: none;
-}
 
 canvas#background {
     display: none; /* Ocultamos el canvas si no es necesario */
@@ -141,13 +233,13 @@ canvas#background {
 /* Área de arrastrar y soltar */
 #upload-area {
     border: 2px dashed #30363d;
-    border-radius: 6px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
     padding: 40px;
     text-align: center;
     cursor: pointer;
     color: #c9d1d9;
     margin-bottom: 20px;
-    transition: background-color 0.3s;
 }
 
 #upload-area.highlight {
@@ -164,25 +256,34 @@ canvas#background {
     display: none;
 }
 
+
+
 /* Animaciones de carga */
 #upload-loading, #analysis-loading {
     text-align: center;
     margin-top: 20px;
 }
 
+.loading-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
 .loader {
-    border: 8px solid #c9d1d9;
-    border-top: 8px solid #238636;
+    border: 4px solid #30363d;
+    border-top: 4px solid #238636;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 15px auto;
     animation: spin 1s linear infinite;
-    margin: 0 auto 10px;
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+
 
 /* Reproductor de video */
 #video-container {
@@ -191,28 +292,31 @@ canvas#background {
 
 #uploaded-video {
     width: 100%;
-    max-width: 600px;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    max-width: 720px;
+    border-radius: 8px;
+    background-color: #161b22;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Botón de análisis */
+Copy/* Botón de análisis */
 #analyze-area {
-    margin-top: 20px;
+   display: flex;
+   margin-top: 20px;
+   justify-content: center;
+   align-items: center;
 }
 
 #analyze-button {
-    padding: 10px 20px;
-    background-color: #238636;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
-}
+    padding: 12px 30px;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    display: block;
+ }
 
 #analyze-button:hover {
-    background-color: #2ea043;
+   background-color: #2ea043;
 }
 
 @keyframes spin {
@@ -228,12 +332,21 @@ canvas#background {
     display: block;
     margin-top: 10px;
 }
+.video-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 800px;
+ }
 
 
 #uploaded-video {
     width: 100%;
     max-width: 600px;
     border: 1px solid #30363d;
+    max-height: 450px;
+    object-fit: contain;
     border-radius: 6px;
 }
 
@@ -255,9 +368,14 @@ canvas#background {
 }
 
 .file-input-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    border: 2px dashed #30363d;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.file-input-wrapper:hover {
+    border-color: #238636;
+    background-color: rgba(35, 134, 54, 0.1);
 }
 
 .upload-label {
@@ -272,6 +390,11 @@ canvas#background {
 .upload-icon {
     font-size: 2rem;
     margin-bottom: 1rem;
+}
+
+.upload-zone {
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .file-input {
@@ -301,4 +424,81 @@ canvas#background {
     padding: 1rem;
     border-radius: 6px;
     margin-top: 1rem;
+}
+
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1em;
+    color: #c9d1d9;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    background-color: #161b22;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+select:focus {
+    border-color: #238636;
+    outline: none;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 20px;    
+}
+
+.page-header h1 {
+    padding: 0 10px; 
+}
+.lead {
+    color: #8b949e;
+    font-size: 1.2em;
+    margin-top: 1rem;
+}
+
+/* Agregar estilos para el wrapper de contenido */
+.content-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* Agregar estilos para la sección de carga */
+.upload-section {
+    margin-bottom: 40px;
+}
+
+.upload-hint {
+    color: #8b949e;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+}
+
+/* Agregar estilos para los estados de carga */
+.loading-text {
+    color: #8b949e;
+    margin-top: 1rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
