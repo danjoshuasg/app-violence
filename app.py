@@ -29,12 +29,14 @@ logging.info("Configuración de variables de entorno cargada.")
 ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv'}
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 VIDEOS_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'videos')
+PROCESSED_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'processed')
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500 MB
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['VIDEOS_FOLDER'] = VIDEOS_FOLDER
+app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
 app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
@@ -149,6 +151,10 @@ def demo():
 def videos(filename):
     logging.info(f"Accediendo a la ruta '/videos/{filename}'")
     try:
+        # Asegurar que existe el directorio de uploads
+        if not os.path.exists(app.config['VIDEOS_FOLDER']):
+            os.makedirs(app.config['VIDEOS_FOLDER'])
+            logging.debug(f"Directorio de uploads creado: {app.config['VIDEOS_FOLDER']}")
         return send_from_directory(app.config['VIDEOS_FOLDER'], filename)
     except Exception as e:
         logging.error(f"Error al servir el video '{filename}': {e}")
@@ -244,7 +250,11 @@ def analyze():
     if 'email' not in session:
         logging.warning("Intento de análisis sin autenticación.")
         return jsonify({'error': 'Usuario no autenticado'}), 401
-
+    
+    if not os.path.exists(app.config['PROCESSED_FOLDER']):
+        os.makedirs(app.config['PROCESSED_FOLDER'])
+        logging.debug(f"Directorio processed creado: {app.config['PROCESSED_FOLDER']}")
+    
     data = request.get_json()
     filename = data.get('filename')
     model_type = data.get('model_type')
@@ -254,10 +264,8 @@ def analyze():
     if filename and allowed_file(filename):
         if is_video_uploaded:
             base_folder = app.config['UPLOAD_FOLDER']
-            logging.debug(f"Usando carpeta de uploads para el análisis: {base_folder}")
         else:
             base_folder = app.config['VIDEOS_FOLDER']
-            logging.debug(f"Usando carpeta de videos preexistentes para el análisis: {base_folder}")
 
         video_path = extract_local_path(filename, base_folder)
         logging.debug(f"Ruta completa del video para análisis: {video_path}")
@@ -267,14 +275,66 @@ def analyze():
             return jsonify({'error': f'El archivo {filename} no existe en el servidor.'}), 404
 
         try:
-            # Realizar predicción utilizando la función importada
-            logging.debug("Iniciando predicción de violencia en el video.")
-            _, prediction = predict_violence(video_path, model_type)
-            logging.info(f"Predicción completada para '{filename}': {prediction}")
-
-            return jsonify({
-                'prediction': prediction
-            })
+            # Realizar predicción y obtener el video procesado
+            processed_video_path, prediction = predict_violence(video_path, model_type)
+            
+            if processed_video_path:
+                # Convertir el video procesado
+                try:
+                    logging.debug("Iniciando conversión del video procesado")
+                    clip = VideoFileClip(processed_video_path)
+                    clip_resized = clip.resize(height=720)
+                    
+                    # Crear nombre para el video convertido
+                    processed_filename = os.path.basename(processed_video_path)
+                    converted_filename = os.path.splitext(processed_filename)[0] + "_converted.mp4"
+                    final_processed_path = os.path.join(app.config['PROCESSED_FOLDER'], converted_filename)
+                    
+                    # Convertir y guardar
+                    clip_resized.write_videofile(final_processed_path, codec="libx264")
+                    clip.close()
+                    clip_resized.close()
+                    
+                    # Eliminar el video procesado original
+                    if os.path.exists(processed_video_path):
+                        os.remove(processed_video_path)
+                        logging.debug(f"Video procesado original eliminado: {processed_video_path}")
+                    
+                    logging.info(f"Video procesado convertido y guardado en: {final_processed_path}")
+                    
+                    # Generar URL para el video procesado convertido
+                    video_url = url_for('processed_file', filename=converted_filename)
+                    
+                    return jsonify({
+                        'prediction': prediction,
+                        'video_url': video_url
+                    })
+                    
+                except Exception as conv_error:
+                    logging.error(f"Error en la conversión del video procesado: {conv_error}")
+                    # En caso de error en la conversión, intentamos usar el video original procesado
+                    if os.path.exists(processed_video_path):
+                        processed_filename = os.path.basename(processed_video_path)
+                        final_processed_path = os.path.join(app.config['PROCESSED_FOLDER'], processed_filename)
+                        os.rename(processed_video_path, final_processed_path)
+                        video_url = url_for('processed_file', filename=processed_filename)
+                        
+                        return jsonify({
+                            'prediction': prediction,
+                            'video_url': video_url,
+                            'warning': 'Se está usando el video sin convertir debido a un error en la conversión.'
+                        })
+                    else:
+                        return jsonify({
+                            'error': 'Error en la conversión y el video original no está disponible',
+                            'prediction': prediction
+                        }), 500
+            else:
+                return jsonify({
+                    'error': 'No se pudo generar el video procesado',
+                    'prediction': prediction
+                }), 500
+                
         except Exception as e:
             error = f"Ha ocurrido un error al analizar el video: {str(e)}"
             logging.error(error)
@@ -283,6 +343,17 @@ def analyze():
         logging.warning("Nombre de archivo no válido recibido para análisis.")
         return jsonify({'error': 'Nombre de archivo no válido.'}), 400
 
+# Ruta para servir los archivos subidos
+@app.route('/processed/<filename>')
+def processed_file(filename):
+    """Ruta para servir los archivos de video procesados."""
+    logging.info(f"Accediendo a la ruta '/processed/{filename}'")
+    try:
+        return send_from_directory(app.config['PROCESSED_FOLDER'], filename)
+    except Exception as e:
+        logging.error(f"Error al servir el archivo procesado '{filename}': {e}")
+        return jsonify({'error': 'Archivo procesado no encontrado.'}), 404
+    
 # Ruta para servir los archivos subidos
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

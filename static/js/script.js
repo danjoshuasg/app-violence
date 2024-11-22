@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
             'Espacios internos': 'violence_indoors.mp4',
             'Espacios externos': 'violence_outdoors.mp4',
             'En multitud': 'violence_crowded.mp4',
-            'Nocturna': 'violence_night.mp4'
+            'Nocturna': 'violence_night.mp4',
+            'Robo': 'violence_steal.mp4'
         },
         'no_violencia': {
         
@@ -109,20 +110,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Manejar el análisis del video
+    // Modificar el manejador del botón de análisis
     analyzeButton.addEventListener('click', async function () {
         try {
             analysisLoading.hidden = false;
-            resultContainer.hidden = true;
+
+            resultContainer.hidden = true; // Quitarlo porque se mostrará un video con los resultados
+            
+            // Agregar un flag visualizador del video procesado
 
             let filename;
             if (customVideoLoaded) {
-                // Cuando el video es subido por el usuario, 'uploadedVideo.src' es la URL
-                // Extraemos solo el nombre del archivo
                 const url = new URL(uploadedVideo.src);
                 filename = url.pathname.split('/').pop();
             } else {
-                // Cuando el video es preexistente, extraemos el nombre del archivo de la URL
                 const url = new URL(uploadedVideo.src);
                 filename = url.pathname.split('/').pop();
             }
@@ -133,21 +134,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    filename: filename, // Enviar solo el nombre del archivo
+                    filename: filename,
                     content_type: contentTypeSelect.value,
                     video_type: videoTypeSelect.value,
-                    model_type: modelTypeSelect.value, // Agrega el tipo de modelo seleccionado
+                    model_type: modelTypeSelect.value,
                     is_video_uploaded: customVideoLoaded
                 })
             });
 
+            // Enviar el archivo al servidor processed
             const data = await response.json();
 
             if (!response.ok) {
                 throw new Error(data.error || 'Error al analizar el video');
             }
 
-            // Mostrar resultados
+            // Actualizar el video procesado
+            const processedVideo = document.getElementById('processed-video');
+            processedVideo.src = data.video_url;
+            processedVideo.load();
+            
+            // Mostrar los resultados numéricos debajo del video
             predictionText.textContent = JSON.stringify(data.prediction, null, 2);
             resultContainer.hidden = false;
 

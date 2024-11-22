@@ -5,4 +5,6 @@ flask_session
 app.log
 processing.py
 runtime.txt
-
+docker-compose.yml
+Dockerfile
+runtime.txt

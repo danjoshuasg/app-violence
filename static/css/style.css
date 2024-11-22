@@ -290,13 +290,6 @@ canvas#background {
     margin-top: 20px;
 }
 
-#uploaded-video {
-    width: 100%;
-    max-width: 720px;
-    border-radius: 8px;
-    background-color: #161b22;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
 Copy/* Botón de análisis */
 #analyze-area {
@@ -342,6 +335,15 @@ Copy/* Botón de análisis */
 
 
 #uploaded-video {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #30363d;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+#processed-video {
     width: 100%;
     max-width: 600px;
     border: 1px solid #30363d;
